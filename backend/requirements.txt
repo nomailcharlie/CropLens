@@ -1,0 +1,15 @@
+# Pinned dependencies for CropLens Agent backend
+# OpenCV 5 — required by spec; verified at import time.
+opencv-python-headless==5.0.0.93
+numpy==2.0.2
+# Web framework + Lambda adapter
+fastapi==0.115.6
+uvicorn==0.32.1
+python-multipart==0.0.20
+mangum==0.19.0
+# Config
+pydantic==2.10.4
+pydantic-settings==2.7.1
+# Tests
+pytest==8.3.4
+httpx==0.28.1

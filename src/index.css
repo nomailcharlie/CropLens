@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-sand-50 text-forest-900 font-sans antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(62, 118, 80, 0.08), transparent),
+      radial-gradient(ellipse 60% 40% at 90% 10%, rgba(187, 124, 67, 0.05), transparent);
+    background-attachment: fixed;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+    line-height: 1.2;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white/90 backdrop-blur-sm rounded-2xl border border-forest-100/60 shadow-card;
+  }
+  .card-pad {
+    @apply p-5 sm:p-6;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-forest-400 focus-visible:ring-offset-2 focus-visible:ring-offset-sand-50 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-forest-600 text-white hover:bg-forest-700 active:scale-[0.98] px-5 py-2.5 text-sm shadow-sm;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-forest-700 border border-forest-200 hover:border-forest-300 hover:bg-forest-50 px-4 py-2.5 text-sm;
+  }
+  .btn-ghost {
+    @apply btn text-forest-600 hover:bg-forest-50 px-3 py-2 text-sm;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium;
+  }
+  .section-title {
+    @apply text-base font-semibold text-forest-800 flex items-center gap-2;
+  }
+  .label-mono {
+    @apply text-[11px] font-mono uppercase tracking-wider text-forest-500;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(62,118,80,0.3) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-forest-200 rounded-full;
+  }
+}
+
+@layer utilities {
+  .shimmer-bg {
+    background: linear-gradient(90deg, rgba(62,118,80,0.04) 0%, rgba(62,118,80,0.10) 50%, rgba(62,118,80,0.04) 100%);
+    background-size: 200% 100%;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
