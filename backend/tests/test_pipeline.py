@@ -111,6 +111,31 @@ def test_evaluation_suite_runs():
     assert report["opencv_version"].startswith("5")
 
 
+def test_evaluation_summary_precision_recall_independent():
+    # Regression: mean_recall was computed from r.precision (copy-paste bug),
+    # making summary precision == recall. Verify they are independently
+    # calculated from their respective per-case metrics.
+    report = run_suite(seeds=[1])
+    for sev, summary in report["summary_by_severity"].items():
+        if summary["mean_precision"] is None or summary["mean_recall"] is None:
+            continue  # "none" severity has no anomalies -> N/A is correct
+        # Recompute independently from per-case rows and compare to summary
+        rows = [r for r in report["results"] if r["severity"] == sev and r["severity"] != "none"]
+        expected_prec = round(float(np.mean([r["precision"] for r in rows])), 4)
+        expected_rec = round(float(np.mean([r["recall"] for r in rows])), 4)
+        assert summary["mean_precision"] == expected_prec, f"{sev} precision mismatch"
+        assert summary["mean_recall"] == expected_rec, f"{sev} recall mismatch"
+        # The bug made them identical; they must differ in at least one severity
+        # (precision and recall measure different things on imperfect masks).
+    # Sanity: at least one severity has precision != recall
+    diffs = [
+        abs(s["mean_precision"] - s["mean_recall"])
+        for s in report["summary_by_severity"].values()
+        if s["mean_precision"] is not None and s["mean_recall"] is not None
+    ]
+    assert max(diffs) > 0.0, "precision == recall for all severities; aggregation bug likely"
+
+
 def test_cors_local_mode_single_origin_header():
     # In "app" mode (default for local), exactly one Access-Control-Allow-Origin
     # header must be present on health, preflight, and a POST — never duplicated.

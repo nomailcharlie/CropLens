@@ -198,12 +198,15 @@ def _summarize(cases: list[SyntheticCase], results: list[EvalResult]) -> dict[st
         by_sev.setdefault(r.severity, []).append(r)
     summary = {}
     for sev, rs in by_sev.items():
-        iou = [r.iou for r in rs if r.severity != "none"]
+        anomalous = [r for r in rs if r.severity != "none"]
+        iou_vals = [r.iou for r in anomalous]
+        prec_vals = [r.precision for r in anomalous]
+        rec_vals = [r.recall for r in anomalous]
         summary[sev] = {
             "n": len(rs),
-            "mean_iou": round(float(np.mean(iou)), 4) if iou else None,
-            "mean_precision": round(float(np.mean([r.precision for r in rs if r.severity != "none"])), 4) if any(rr.severity != "none" for rr in rs) else None,
-            "mean_recall": round(float(np.mean([r.precision for r in rs if r.severity != "none"])), 4) if any(rr.severity != "none" for rr in rs) else None,
+            "mean_iou": round(float(np.mean(iou_vals)), 4) if iou_vals else None,
+            "mean_precision": round(float(np.mean(prec_vals)), 4) if prec_vals else None,
+            "mean_recall": round(float(np.mean(rec_vals)), 4) if rec_vals else None,
             "accept_rate": round(sum(1 for r in rs if r.accepted) / len(rs), 3),
         }
     return {
